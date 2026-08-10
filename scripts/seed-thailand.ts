@@ -1,5 +1,7 @@
 const BASE = "http://localhost:3000";
 
+export {};
+
 const DATA: { name: string; summary: string; category: string; metadata: Record<string, unknown> }[] = [
   {
     name: "Thailand retirement visa",

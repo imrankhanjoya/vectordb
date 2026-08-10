@@ -1,6 +1,8 @@
-import { pipeline } from "@xenova/transformers";
+import { pipeline, env } from "@xenova/transformers";
 
 const DIMENSIONS = 384;
+
+env.cacheDir = "/tmp/transformers-cache";
 
 type FeatureExtractionFn = (
   texts: string | string[],
