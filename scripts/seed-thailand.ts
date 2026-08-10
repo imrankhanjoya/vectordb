@@ -1,5 +1,3 @@
-import { readFileSync } from "fs";
-
 const BASE = "http://localhost:3000";
 
 const DATA: { name: string; summary: string; category: string; metadata: Record<string, unknown> }[] = [
