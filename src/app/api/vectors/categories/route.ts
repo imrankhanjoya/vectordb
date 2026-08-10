@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import getClient from "@/lib/mongodb";
 
 const COLLECTION = "vectors";
 
 export async function GET() {
   try {
-    const client = await clientPromise;
+    const client = await getClient();
     const categories = await client
       .db()
       .collection(COLLECTION)

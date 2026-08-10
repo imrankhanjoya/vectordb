@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import getClient from "@/lib/mongodb";
 
 const COLLECTION = "vectors";
 
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     const skip = Number(searchParams.get("skip") ?? 0) || 0;
     const category = searchParams.get("category");
 
-    const client = await clientPromise;
+    const client = await getClient();
     const collection = client.db().collection(COLLECTION);
 
     const filter = category ? { category } : {};
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const client = await clientPromise;
+    const client = await getClient();
     const collection = client.db().collection(COLLECTION);
 
     const result = await collection.insertOne({

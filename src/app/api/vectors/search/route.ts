@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import clientPromise from "@/lib/mongodb";
+import getClient from "@/lib/mongodb";
 
 const COLLECTION = "vectors";
 const INDEX = "vector_index";
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const client = await clientPromise;
+    const client = await getClient();
     const collection = client.db().collection(COLLECTION);
 
     const pipeline = [
