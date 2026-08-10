@@ -2,11 +2,19 @@ import { pipeline } from "@xenova/transformers";
 
 const DIMENSIONS = 384;
 
-let extractorPromise: Promise<Awaited<ReturnType<typeof pipeline>>> | null = null;
+type FeatureExtractionFn = (
+  texts: string | string[],
+  options: { pooling: string; normalize: boolean }
+) => Promise<{ dims: number[]; data: number[] | Float32Array } | Array<{ dims: number[]; data: number[] | Float32Array }>>;
 
-async function getExtractor() {
+let extractorPromise: Promise<FeatureExtractionFn> | null = null;
+
+function getExtractor(): Promise<FeatureExtractionFn> {
   if (!extractorPromise) {
-    extractorPromise = pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
+    extractorPromise = pipeline(
+      "feature-extraction",
+      "Xenova/all-MiniLM-L6-v2"
+    ) as Promise<FeatureExtractionFn>;
   }
   return extractorPromise;
 }
@@ -26,9 +34,9 @@ export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
   for (const tensor of tensors) {
     const dims = tensor.dims ?? [texts.length, DIMENSIONS];
     const size = dims[dims.length - 1] ?? DIMENSIONS;
-    const data = tensor.data as number[];
+    const data = Array.from(tensor.data as ArrayLike<number>);
     for (let i = 0; i < data.length; i += size) {
-      embeddings.push(Array.from(data.slice(i, i + size)));
+      embeddings.push(data.slice(i, i + size));
     }
   }
 
